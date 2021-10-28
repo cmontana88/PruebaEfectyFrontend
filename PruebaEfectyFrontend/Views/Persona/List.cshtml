@@ -1,0 +1,128 @@
+﻿@model IEnumerable<PruebaEfectyFrontend.Models.PersonaViewModel>
+
+@{
+    ViewData["Title"] = "List";
+}
+
+<h1>List Personas</h1>
+
+<p>
+    @Html.ActionLink("Crear Persona", "Index", "Persona")
+</p>
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-3">
+                <div class="form-group">
+                    <label>Filtro</label>
+                    @Html.DropDownList("SelectFiltro", ViewBag.Filtros, null, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="form-group">
+                    <label>Texto</label>
+                    @Html.TextBox("ValorFiltro", null, "", new { placeholder = "Texto", @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-2" style="padding-top:30px;">
+                <button class="btn btn-info" id="filtrar">Filtrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombres)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Apellidos)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TipoDocumento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaNacimiento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ValoraGanar)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EstadoCivil)
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombres)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Apellidos)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TipoDocumentoDescripcion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaNacimiento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValoraGanar)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EstadoCivil)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div style="padding-top:15px;">
+    <div class="row">
+        <div class="col-4">
+            @Html.ActionLink("Volver", "Index", "Home")
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            $('#filtrar').on('click', function () {
+                var optionSelected = $('#SelectFiltro').find("option:selected");
+                var filtroid = optionSelected.val();
+
+                var text = $('#ValorFiltro').val();
+
+                var Filtro = {
+                    "FiltroId": filtroid,
+                    "Texto": text
+                };
+
+                $.ajax(
+                    {
+                        url: '@Url.Action("FiltrarPersonas", "Persona")',
+                        type: "Post",
+                        async: false,
+                        dataType: "html",
+                        contentType: "application/json;charset=utf-8",
+                        data: JSON.stringify(Filtro),
+                        contentType: "application/json;charset=utf-8",
+                        success: function (data) {
+                            $("body").html(data);
+                        }
+                    });
+
+                $('#ValorFiltro').val(text);
+                $("#SelectFiltro").val(filtroid);
+            });
+        });
+    </script>
+    
+}

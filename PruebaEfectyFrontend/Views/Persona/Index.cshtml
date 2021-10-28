@@ -1,0 +1,101 @@
+﻿@model PruebaEfectyFrontend.Models.PersonaViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Crear Persona</h1>
+
+<div class="card">
+    <div class="card-body">
+        <h4>Datos</h4>
+        <hr />
+        <div class="row">
+            <div class="col-md-12">
+                @using (Html.BeginForm("Crear", "Persona", FormMethod.Post))
+                {
+                    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(m => m.Id)
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Nombres, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.Nombres, "", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.Nombres, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Apellidos, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.Apellidos, "", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.Apellidos, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row align-items-center">
+                        <div class="col-3">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.TipoDocumento, new { @class = "control-label" })
+                                @Html.DropDownList("TipoDocumento", ViewBag.TipoDocumentos, null, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.FechaNacimiento, new { @class = "control-label" })
+                                @Html.EditorFor(m => m.FechaNacimiento, "", new { htmlAttributes = new { @class = "form-control", @type = "date" } })
+                                @Html.ValidationMessageFor(m => m.FechaNacimiento, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ValoraGanar, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.ValoraGanar, "", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.ValoraGanar, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="form-group form-check form-check-inline" style="padding-top: 30px;">
+                                @Html.CheckBoxFor(m => m.EstadoCivil, new { @class = "form-check-input" })
+                                @Html.LabelFor(m => m.EstadoCivil, new { @class = "form-check-label" })
+                                @Html.ValidationMessageFor(m => m.EstadoCivil, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Crear Persona" class="btn btn-primary" />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(ViewBag.MensajeExitoso))
+{
+    <div class="alert alert-success" role="alert" style="padding-top:15px">
+        @ViewBag.MensajeExitoso
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(ViewBag.MensajeError))
+{
+    <div class="alert alert-danger" role="alert" style="padding-top:15px">
+        @ViewBag.MensajeError
+    </div>
+}
+
+<div style="padding-top:15px;">
+    <div class="row">
+        <div class="col-4">
+            @Html.ActionLink("Volver", "Index", "Home")
+        </div>
+        <div class="col-4">
+            @Html.ActionLink("Ver Listado Personas", "List", "Persona")
+        </div>
+    </div>
+    
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
